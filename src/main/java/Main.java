@@ -9,14 +9,15 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         sb.append("Самое частое количество повторений ");
         new Thread(() -> {
-            String[] routes = new String[1000];
-            //генерация маршрута
-            for (int i = 0; i < routes.length; i++) {
-                routes[i] = generateRoute("RLRFR", 100);
-                System.out.println(routes[i]);
-            }
-            for (String route : routes) {
-                synchronized (sizeToFreq) {
+            synchronized (sizeToFreq) {
+                String[] routes = new String[1000];
+                //генерация маршрута
+                for (int i = 0; i < routes.length; i++) {
+                    routes[i] = generateRoute("RLRFR", 100);
+                    System.out.println(routes[i]);
+                }
+                for (String route : routes) {
+
                     int partSize = 0;
                     for (int i = 0; i < route.length(); i++) {
                         if (route.charAt(i) == 'R') {
@@ -38,8 +39,8 @@ public class Main {
                             }
                         }
                     }
-                    sizeToFreq.notify();
                 }
+                sizeToFreq.notify();
             }
         }).start();
         synchronized (sizeToFreq) {
